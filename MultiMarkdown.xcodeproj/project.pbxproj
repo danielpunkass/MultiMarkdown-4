@@ -48,6 +48,7 @@
 		5AE59DBD172A14D600401A65 /* memoir.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A2534F1172768A8003D1A91 /* memoir.c */; };
 		5AE59DBE172A14D600401A65 /* opml.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A2534F3172768A8003D1A91 /* opml.c */; };
 		5AE59DBF172A14D600401A65 /* odf.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A89852C17297DFB00D1D72D /* odf.c */; };
+		65A9F7421B99CFE600474F56 /* libMultiMarkdown.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A60F8FF172C099100EFBF5B /* libMultiMarkdown.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -208,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A1FF04A186A1724002544C0 /* lyxbeamer.h in Headers */,
+				65A9F7421B99CFE600474F56 /* libMultiMarkdown.h in Headers */,
 				5A50A7591ADDFE600069AFD5 /* toc.h in Headers */,
 				5A56E587186CE833004089C0 /* transclude.h in Headers */,
 				5A1FF045186A16D3002544C0 /* lyx.h in Headers */,
@@ -434,6 +436,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = StaticLibraryHeaders/MultiMarkdown;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -469,6 +472,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = StaticLibraryHeaders/MultiMarkdown;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
