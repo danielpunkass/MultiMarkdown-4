@@ -55,6 +55,22 @@ Once installed, you simply do something like the following:
 * `multimarkdown -b *.txt` --- `-b` or `--batch` mode can process multiple files at once, converting `file.txt` to `file.html` or `file.tex` as directed. Using this feature, you can convert a directory of MultiMarkdown text files into HTML files, or LaTeX files with a single command without having to specify the output files manually. **CAUTION**: This will overwrite existing files with the `html` or `tex` extension, so use with caution. 
 
 
+# Static Library Usage #
+
+If you wish to link MultiMarkdown with another Xcode based project, drag the MultiMarkdown.xcodeproj file to the project navigator to make a reference to it, then add the MultiMarkdown static library product as a project dependency and as a linked library.
+
+The public interface to the MultiMarkdown static library is described in libMultiMarkdown.h, which you can include from your project by adding the build setting:
+
+```
+HEADER_SEARCH_PATHS = $(CONFIGURATION_BUILD_DIR)/StaticLibraryHeaders
+```
+
+And then including into whichever source file needs access to MultiMarkdown:
+
+```
+#include <MultiMarkdown/libMultiMarkdown.h>
+```
+
 # Notes #
 
 If you get an error that `greg` fails to build try `touch greg/greg.c`.  I had an issue where the timestamp on that file might have been too old, which caused the build to fail.
