@@ -280,7 +280,7 @@
 		5AD6CB031718CA910085E51D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0700;
 			};
 			buildConfigurationList = 5AD6CB061718CA910085E51D /* Build configuration list for PBXProject "MultiMarkdown" */;
 			compatibilityVersion = "Xcode 3.2";
