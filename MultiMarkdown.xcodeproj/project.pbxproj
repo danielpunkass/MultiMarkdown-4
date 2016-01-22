@@ -272,7 +272,7 @@
 /* Begin PBXLegacyTarget section */
 		5A60F937172D80BC00EFBF5B /* greg */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
+			buildArgumentsString = "";
 			buildConfigurationList = 5A60F938172D80BC00EFBF5B /* Build configuration list for PBXLegacyTarget "greg" */;
 			buildPhases = (
 			);
