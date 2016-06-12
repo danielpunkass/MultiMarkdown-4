@@ -203,7 +203,6 @@ void append_list(node *new, node *list) {
 
     /* If we append to an empty list... */
     if (list == NULL) {
-        list = new;
         return;
     }
     
