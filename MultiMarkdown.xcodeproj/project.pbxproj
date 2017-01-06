@@ -433,7 +433,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${BUILT_PRODUCTS_DIR}/greg -o ${SRCROOT}/parser.c ${SRCROOT}/parser.leg\n";
+			shellScript = "\"${BUILT_PRODUCTS_DIR}/greg\" -o \"${SRCROOT}/parser.c\" \"${SRCROOT}/parser.leg\"\n";
 		};
 		5AE59DB3172A14D600401A65 /* Generate Parser */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -449,7 +449,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${BUILT_PRODUCTS_DIR}/greg -o ${SRCROOT}/parser.c ${SRCROOT}/parser.leg\n";
+			shellScript = "\"${BUILT_PRODUCTS_DIR}/greg\" -o \"${SRCROOT}/parser.c\" \"${SRCROOT}/parser.leg\"\n";
 		};
 		65B5F6271C49B0E10044CC42 /* Generate Parser */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -465,7 +465,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${BUILT_PRODUCTS_DIR}/greg -o ${SRCROOT}/parser.c ${SRCROOT}/parser.leg\n";
+			shellScript = "\"${BUILT_PRODUCTS_DIR}/greg\" -o \"${SRCROOT}/parser.c\" \"${SRCROOT}/parser.leg\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
