@@ -465,7 +465,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${BUILT_PRODUCTS_DIR}/greg\" -o \"${SRCROOT}/parser.c\" \"${SRCROOT}/parser.leg\"\n";
+			shellScript = "\"${BUILD_ROOT}/${CONFIGURATION}/greg\" -o \"${SRCROOT}/parser.c\" \"${SRCROOT}/parser.leg\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
