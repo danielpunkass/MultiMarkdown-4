@@ -20,6 +20,9 @@
 	GNU General Public License for more details.
 */
 
+// Disable Clang analysis for generated parser code
+#ifndef __clang_analyzer__
+
 #include "parser.h"
 #include "writer.h"
 
@@ -1715,3 +1718,4 @@ char * extract_metadata_value(const char *source, unsigned long extensions, char
 	return out;
 }
 
+#endif
