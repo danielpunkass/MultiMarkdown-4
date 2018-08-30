@@ -361,82 +361,83 @@ void print_html_node(GString *out, node *n, scratch_pad *scratch) {
 	fprintf(stderr, "print html link: '%s'\n",n->str);
 #endif
 			/* Stash a copy of the link data */
-			if (n->link_data != NULL)
+			if (n->link_data != NULL) {
 				temp_link_data = mk_link_data(n->link_data->label, n->link_data->source, n->link_data->title, n->link_data->attr);
 
-			/* Do we have proper info? */
-			if ((n->link_data->label == NULL) &&
-			(n->link_data->source == NULL)) {
-				/* we seem to be a [foo][] style link */
-				/* so load a label */
-				temp_str = g_string_new("");
-				print_raw_node_tree(temp_str, n->children);
-				n->link_data->label = temp_str->str;
-				g_string_free(temp_str, FALSE);
-			}
-			/* Load reference data */
-			if (n->link_data->label != NULL) {
-				temp = strdup(n->link_data->label);
+				/* Do we have proper info? */
+				if ((n->link_data->label == NULL) &&
+				(n->link_data->source == NULL)) {
+					/* we seem to be a [foo][] style link */
+					/* so load a label */
+					temp_str = g_string_new("");
+					print_raw_node_tree(temp_str, n->children);
+					n->link_data->label = temp_str->str;
+					g_string_free(temp_str, FALSE);
+				}
+				/* Load reference data */
+				if (n->link_data->label != NULL) {
+					temp = strdup(n->link_data->label);
 
-#ifdef DEBUG_ON
-	fprintf(stderr, "print html link: '%s'\n",n->link_data->title);				
-	fprintf(stderr, "print html link: '%s'\n",temp);
-#endif
+	#ifdef DEBUG_ON
+		fprintf(stderr, "print html link: '%s'\n",n->link_data->title);
+		fprintf(stderr, "print html link: '%s'\n",temp);
+	#endif
+					n->link_data->attr = NULL;
+					free_link_data(n->link_data);
+
+					n->link_data = extract_link_data(temp, scratch);
+					if (n->link_data == NULL) {
+						/* replace original text since no definition found */
+						g_string_append_printf(out, "[");
+						print_html_node(out, n->children, scratch);
+						g_string_append_printf(out,"]");
+						if (n->children->next != NULL) {
+							g_string_append_printf(out, "[");
+							print_html_node_tree(out, n->children->next, scratch);
+							g_string_append_printf(out,"]");
+						} else if (n->str != NULL) {
+							/* no title label, so see if we stashed str*/
+							g_string_append_printf(out, "%s", n->str);
+						} else {
+							g_string_append_printf(out, "[%s]",temp);
+						}
+
+						free(temp);
+
+						/* Restore stashed copy */
+						n->link_data = temp_link_data;
+
+						break;
+					}
+					free(temp);
+				}
+				g_string_append_printf(out, "<a");
+				if (n->link_data->source != NULL) {
+					g_string_append_printf(out, " href=\"");
+					if (strncmp(n->link_data->source,"mailto:", 6) == 0) {
+						scratch->obfuscate = 1;		/* flag obfuscated */
+					}
+					print_html_string(out,n->link_data->source, scratch);
+					g_string_append_printf(out, "\"");
+				}
+				if ((n->link_data->title != NULL) && (strlen(n->link_data->title) > 0)) {
+					g_string_append_printf(out, " title=\"");
+					print_html_string(out, n->link_data->title, scratch);
+					g_string_append_printf(out, "\"");
+				}
+				print_html_node_tree(out, n->link_data->attr, scratch);
+				g_string_append_printf(out, ">");
+				if (n->children != NULL)
+					print_html_node_tree(out,n->children,scratch);
+				g_string_append_printf(out, "</a>");
+				scratch->obfuscate = 0;
+
+				/* Restore stashed copy */
 				n->link_data->attr = NULL;
 				free_link_data(n->link_data);
-
-				n->link_data = extract_link_data(temp, scratch);
-				if (n->link_data == NULL) {
-					/* replace original text since no definition found */
-					g_string_append_printf(out, "[");
-					print_html_node(out, n->children, scratch);
-					g_string_append_printf(out,"]");
-					if (n->children->next != NULL) {
-						g_string_append_printf(out, "[");
-						print_html_node_tree(out, n->children->next, scratch);
-						g_string_append_printf(out,"]");
-					} else if (n->str != NULL) {
-						/* no title label, so see if we stashed str*/
-						g_string_append_printf(out, "%s", n->str);
-					} else {
-						g_string_append_printf(out, "[%s]",temp);
-					}
-					
-					free(temp);
-
-					/* Restore stashed copy */
-					n->link_data = temp_link_data;
-
-					break;
-				}
-				free(temp);
+				n->link_data = temp_link_data;
 			}
-			g_string_append_printf(out, "<a");
-			if (n->link_data->source != NULL) {
-				g_string_append_printf(out, " href=\"");
-				if (strncmp(n->link_data->source,"mailto:", 6) == 0) {
-					scratch->obfuscate = 1;		/* flag obfuscated */
-				}
-				print_html_string(out,n->link_data->source, scratch);
-				g_string_append_printf(out, "\"");
-			}
-			if ((n->link_data->title != NULL) && (strlen(n->link_data->title) > 0)) {
-				g_string_append_printf(out, " title=\"");
-				print_html_string(out, n->link_data->title, scratch);
-				g_string_append_printf(out, "\"");
-			}
-			print_html_node_tree(out, n->link_data->attr, scratch);
-			g_string_append_printf(out, ">");
-			if (n->children != NULL)
-				print_html_node_tree(out,n->children,scratch);
-			g_string_append_printf(out, "</a>");
-			scratch->obfuscate = 0;
-
-			/* Restore stashed copy */
-			n->link_data->attr = NULL;
-			free_link_data(n->link_data);
-			n->link_data = temp_link_data;
-
+			
 			break;
 		case ATTRKEY:
 			if ( (strcmp(n->str,"height") == 0) || (strcmp(n->str, "width") == 0)) {

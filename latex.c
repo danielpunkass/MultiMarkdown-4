@@ -675,73 +675,75 @@ void print_latex_node(GString *out, node *n, scratch_pad *scratch) {
 #ifdef DEBUG_ON
 	fprintf(stderr, "\nprint cite\n");
 #endif
-			if ((n->link_data != NULL) && (strncmp(n->link_data->label,"[#",2) == 0)) {
-				/* external citation (e.g. BibTeX) */
-				n->link_data->label[strlen(n->link_data->label)-1] = '\0';
-				if (n->key == NOCITATION) {
-					g_string_append_printf(out, "~\\nocite{%s}",&n->str[2]);
-				} else {
-					g_string_append_printf(out, "<FAKE span class=\"externalcitation\">");
-					g_string_append_printf(out, "</span>");
-				}
-			} else {
-#ifdef DEBUG_ON
-				fprintf(stderr, "internal cite\n");
-#endif
-				/* MMD citation, so output as footnote */
-				/* TODO: create separate stream from footnotes */
-				lev = note_number_for_label(n->link_data->label, scratch);
-				if (lev != 0) {
-#ifdef DEBUG_ON
-					fprintf(stderr, "matching cite found\n");
-#endif
-					temp_node = node_for_count(scratch->used_notes, lev);
-					/* flag that this is used as a citation */
-					temp_node->key = CITATIONSOURCE;
-					if (lev > scratch->max_footnote_num) {
-						scratch->max_footnote_num = lev;
-					}
+			if (n->link_data != NULL) {
+				if (strncmp(n->link_data->label,"[#",2) == 0) {
+					/* external citation (e.g. BibTeX) */
+					n->link_data->label[strlen(n->link_data->label)-1] = '\0';
 					if (n->key == NOCITATION) {
-						g_string_append_printf(out, "~\\nocite{%s}", n->link_data->label);
+						g_string_append_printf(out, "~\\nocite{%s}",&n->str[2]);
 					} else {
-						if (n->children != NULL) {
-							g_string_append_printf(out, "~\\citep[");
-							print_latex_node(out, n->children, scratch);
-							g_string_append_printf(out,"]{%s}",n->link_data->label);
-						} else {
-							g_string_append_printf(out, "~\\citep{%s}", n->link_data->label);
+						g_string_append_printf(out, "<FAKE span class=\"externalcitation\">");
+						g_string_append_printf(out, "</span>");
+					}
+				} else {
+	#ifdef DEBUG_ON
+					fprintf(stderr, "internal cite\n");
+	#endif
+					/* MMD citation, so output as footnote */
+					/* TODO: create separate stream from footnotes */
+					lev = note_number_for_label(n->link_data->label, scratch);
+					if (lev != 0) {
+	#ifdef DEBUG_ON
+						fprintf(stderr, "matching cite found\n");
+	#endif
+						temp_node = node_for_count(scratch->used_notes, lev);
+						/* flag that this is used as a citation */
+						temp_node->key = CITATIONSOURCE;
+						if (lev > scratch->max_footnote_num) {
+							scratch->max_footnote_num = lev;
 						}
-					}
-				} else {
-					/* not located -- this is external cite */
-#ifdef DEBUG_ON
-				fprintf(stderr, "no match for cite: '%s'\n",n->link_data->label);
-#endif
-					temp = n->link_data->label;
-					if (n->key == NOCITATION) {
-						g_string_append_printf(out, "~\\nocite{%s}",n->link_data->label);
-					} else {
-						if (n->children != NULL) {
-#ifdef DEBUG_ON
-				fprintf(stderr, "cite with children\n");
-#endif
-							if (strcmp(&temp[strlen(temp) - 1],";") == 0) {
-								g_string_append_printf(out, " \\citet[");
-								temp[strlen(temp) - 1] = '\0';
-							} else {
-								g_string_append_printf(out, "~\\citep[");
-							}
-							print_latex_node(out, n->children, scratch);
-							g_string_append_printf(out, "]{%s}",temp);
+						if (n->key == NOCITATION) {
+							g_string_append_printf(out, "~\\nocite{%s}", n->link_data->label);
 						} else {
-#ifdef DEBUG_ON
-				fprintf(stderr, "cite without children. locat:'%s'\n",n->str);
-#endif
-							if (strcmp(&temp[strlen(temp) - 1],";") == 0) {
-								temp[strlen(temp) - 1] = '\0';
-								g_string_append_printf(out, " \\citet{%s}",temp);
+							if (n->children != NULL) {
+								g_string_append_printf(out, "~\\citep[");
+								print_latex_node(out, n->children, scratch);
+								g_string_append_printf(out,"]{%s}",n->link_data->label);
 							} else {
-								g_string_append_printf(out, "~\\citep{%s}",temp);
+								g_string_append_printf(out, "~\\citep{%s}", n->link_data->label);
+							}
+						}
+					} else {
+						/* not located -- this is external cite */
+	#ifdef DEBUG_ON
+					fprintf(stderr, "no match for cite: '%s'\n",n->link_data->label);
+	#endif
+						temp = n->link_data->label;
+						if (n->key == NOCITATION) {
+							g_string_append_printf(out, "~\\nocite{%s}",n->link_data->label);
+						} else {
+							if (n->children != NULL) {
+	#ifdef DEBUG_ON
+					fprintf(stderr, "cite with children\n");
+	#endif
+								if (strcmp(&temp[strlen(temp) - 1],";") == 0) {
+									g_string_append_printf(out, " \\citet[");
+									temp[strlen(temp) - 1] = '\0';
+								} else {
+									g_string_append_printf(out, "~\\citep[");
+								}
+								print_latex_node(out, n->children, scratch);
+								g_string_append_printf(out, "]{%s}",temp);
+							} else {
+	#ifdef DEBUG_ON
+					fprintf(stderr, "cite without children. locat:'%s'\n",n->str);
+	#endif
+								if (strcmp(&temp[strlen(temp) - 1],";") == 0) {
+									temp[strlen(temp) - 1] = '\0';
+									g_string_append_printf(out, " \\citet{%s}",temp);
+								} else {
+									g_string_append_printf(out, "~\\citep{%s}",temp);
+								}
 							}
 						}
 					}
