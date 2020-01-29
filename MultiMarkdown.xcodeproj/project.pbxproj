@@ -389,7 +389,7 @@
 		5AD6CB031718CA910085E51D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					65671AB71DEFE8A9000B3665 = {
 						CreatedOnToolsVersion = 8.2;
@@ -403,6 +403,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 5AD6CB021718CA910085E51D;
