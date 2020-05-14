@@ -400,10 +400,9 @@
 			};
 			buildConfigurationList = 5AD6CB061718CA910085E51D /* Build configuration list for PBXProject "MultiMarkdown" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 			);
 			mainGroup = 5AD6CB021718CA910085E51D;
