@@ -313,10 +313,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5A60F8D8172C07D100EFBF5B /* Build configuration list for PBXNativeTarget "MultiMarkdown" */;
 			buildPhases = (
+				5A60F8D5172C07D100EFBF5B /* Headers */,
 				5A60F8E6172C07F100EFBF5B /* Generate Parser */,
 				5A60F8D3172C07D100EFBF5B /* Sources */,
 				5A60F8D4172C07D100EFBF5B /* Frameworks */,
-				5A60F8D5172C07D100EFBF5B /* Headers */,
 			);
 			buildRules = (
 			);
