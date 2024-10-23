@@ -368,10 +368,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 65B5F6421C49B0E10044CC42 /* Build configuration list for PBXNativeTarget "MultiMarkdownTouch" */;
 			buildPhases = (
+				65B5F63C1C49B0E10044CC42 /* Headers */,
 				65B5F6271C49B0E10044CC42 /* Generate Parser */,
 				65B5F6281C49B0E10044CC42 /* Sources */,
 				65B5F63B1C49B0E10044CC42 /* Frameworks */,
-				65B5F63C1C49B0E10044CC42 /* Headers */,
 			);
 			buildRules = (
 			);
