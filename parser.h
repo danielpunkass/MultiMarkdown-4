@@ -42,6 +42,8 @@ typedef struct {
 	node *autolabels;           /* Store for later retrieval */
 	bool  parse_aborted;        /* We got bogged down - fail parse */
 	clock_t stop_time;          /* Note the deadline to complete parsing */
+	int   list_bullet_indent;   /* Leading space count of the current list item's marker */
+	int   list_cont_indent;     /* Established continuation indent for current item (-1 = unset) */
 } parser_data;
 
 /* A "scratch pad" for storing data when writing output 
@@ -183,6 +185,10 @@ int tree_contains_key_count(node *list, int key);
 node * markdown_chunk_to_node(const char * source, unsigned long extensions);
 
 bool check_timeout();
+
+/* list indentation tracking (redsweater/issues#7031: allow 2-3 space list nesting) */
+bool start_list_item(parser_data *data, const char *bullet_text);
+bool accept_list_indent(parser_data *data, const char *indent_text);
 
 void debug_node(node *n);
 void debug_node_tree(node *n);
