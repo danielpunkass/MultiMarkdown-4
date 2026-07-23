@@ -234,7 +234,10 @@ parser_data * mk_parser_data(const char *charbuf, unsigned long extensions) {
 	
 	result->parse_aborted = 0;
 	result->stop_time = start + 3 * CLOCKS_PER_SEC;	/* 3 second timeout */
-	
+
+	result->list_bullet_indent = 0;
+	result->list_cont_indent = -1;
+
 	return result;
 }
 
@@ -687,6 +690,35 @@ bool check_timeout(parser_data *data) {
 		return 0;
 	}
 	return 1;
+}
+
+/* start_list_item -- record indentation state when a new list item's marker is
+	matched.  bullet_text is the captured marker text including any leading
+	NonindentSpace (e.g. "  - " or "  1. ").
+	(redsweater/issues#7031: allow 2-3 space list nesting) */
+bool start_list_item(parser_data *data, const char *bullet_text) {
+	data->list_bullet_indent = (int)strspn(bullet_text, " ");
+	data->list_cont_indent = -1;
+	return 1;
+}
+
+/* accept_list_indent -- decide whether the captured indentation text
+	(a tab or 2-4 spaces) opens or continues a list continuation block for the
+	current list item.  The first accepted indent must exceed the leading
+	indentation of the item's own marker (so sibling items uniformly indented
+	by 2-3 spaces are not mistaken for nested content); subsequent lines of the
+	same item must match the established indent width exactly, leaving any
+	deeper indentation in place for recursive processing.
+	(redsweater/issues#7031: allow 2-3 space list nesting) */
+bool accept_list_indent(parser_data *data, const char *indent_text) {
+	int width = (indent_text[0] == '\t') ? 4 : (int)strlen(indent_text);
+	if (data->list_cont_indent >= 0)
+		return (width == data->list_cont_indent);
+	if (width > data->list_bullet_indent) {
+		data->list_cont_indent = width;
+		return 1;
+	}
+	return 0;
 }
 
 /* determine whether a certain element is contained within a given list */

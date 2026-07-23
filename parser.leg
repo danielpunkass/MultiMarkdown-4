@@ -267,6 +267,15 @@ Indent =            "\t" | "    "
 IndentedLine =      Indent Line
 OptionallyIndentedLine = Indent? Line
 
+# ListIndent -- indentation opening/continuing a list continuation block.
+# Unlike Indent, also accepts 2-3 spaces so lists nested with less than
+# 4 spaces of indentation work (redsweater/issues#7031).  Each alternative
+# carries its own predicate so a rejected width backtracks to a narrower one.
+ListIndent =  ( < "\t" >   &{ accept_list_indent((parser_data *)G->data, G->text) }
+              | < "    " > &{ accept_list_indent((parser_data *)G->data, G->text) }
+              | < "   " >  &{ accept_list_indent((parser_data *)G->data, G->text) }
+              | < "  " >   &{ accept_list_indent((parser_data *)G->data, G->text) } )
+
 Symbol = < SpecialChar >
 		{ $$ = str(yytext); }
 
@@ -895,6 +904,7 @@ ListLoose = a:StartList
 		{ $$ = list(LIST, a); }
 
 ListItem = < ( Bullet | Enumerator | BulletNoSpace &EmptyList | EnumeratorNoSpace &EmptyList )>
+		&{ start_list_item((parser_data *)G->data, G->text) }
 		a:StartList
 		( ListBlock { a = cons($$, a); }
 		( ListContinuationBlock { a = cons($$, a); } )* )
@@ -906,7 +916,8 @@ ListItem = < ( Bullet | Enumerator | BulletNoSpace &EmptyList | EnumeratorNoSpac
 			$$->children = raw;
 		}
 
-ListItemTight = ( Bullet | Enumerator | BulletNoSpace &EmptyList | EnumeratorNoSpace &EmptyList )
+ListItemTight = < ( Bullet | Enumerator | BulletNoSpace &EmptyList | EnumeratorNoSpace &EmptyList ) >
+		&{ start_list_item((parser_data *)G->data, G->text) }
 		a:StartList
 		( ListBlock { a = cons($$, a); }
 		( !BlankLine
@@ -936,7 +947,7 @@ ListContinuationBlock = a:StartList
 			else
 				a = cons(str(yytext), a);
 		} )
-		( Indent !BlankLine ListBlock { a = cons($$, a); } )+
+		( ListIndent !BlankLine ListBlock { a = cons($$, a); } )+
 		{  $$ = mk_str_from_list(a, false); }
 
 Enumerator = NonindentSpace [0-9]+ '.' Spacechar+
