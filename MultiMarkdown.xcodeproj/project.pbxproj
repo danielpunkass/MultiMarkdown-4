@@ -845,6 +845,8 @@
 				PUBLIC_HEADERS_FOLDER_PATH = StaticLibraryHeaders/MultiMarkdown;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Debug;
 		};
@@ -882,6 +884,8 @@
 				PUBLIC_HEADERS_FOLDER_PATH = StaticLibraryHeaders/MultiMarkdown;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Release;
 		};
