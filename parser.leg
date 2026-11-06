@@ -1213,7 +1213,7 @@ HtmlBlockInTags = HtmlBlockAddress
 		| HtmlBlockIns
 		| HtmlBlockMark
 
-HtmlBlock = !MarkdownHtmlTagOpen < ( HtmlBlockInTags | HtmlComment | HtmlBlockSelfClosing ) >
+HtmlBlock = !MarkdownHtmlTagOpen < ( HtmlBlockInTags | HtmlComment | HtmlBlockSelfClosing | HtmlBlockHr ) >
 		BlankLine+
 		{
 			if (ext(EXT_FILTER_HTML)) {
@@ -1244,6 +1244,13 @@ MarkdownHtmlTagOpen = a:StartList '<' {a = cons(mk_str("<"),a);}
 			{ $$ = mk_str_from_list(a,false); $$->key = HTML; }
 
 HtmlBlockSelfClosing = '<' Spnl HtmlBlockType Spnl HtmlAttribute* '/' Spnl '>'
+
+# HtmlBlockHr -- <hr> is a void element, so it has no closing tag for
+# HtmlBlockInTags to match, and HTML (unlike XHTML) writes it without the
+# slash HtmlBlockSelfClosing requires.  Accept it either way, as Markdown.pl
+# does.  Without this a bare <hr> became paragraph text, swallowing any HTML
+# block on the following line into an invalid nested <p> (redsweater/issues#7347).
+HtmlBlockHr = '<' Spnl ("hr" | "HR") !AlphanumericAscii Spnl HtmlAttribute* '/'? Spnl '>'
 
 HtmlBlockType = "address" | "blockquote" | "center" | "dir" | "div" | "dl" | "fieldset" | "form" | "h1" | "h2" | "h3" |
 		"h4" | "h5" | "h6" | "hr" | "isindex" | "menu" | "noframes" | "noscript" | "ol" | "pre" | "p" | "table" |
